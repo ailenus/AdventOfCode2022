@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -13,8 +14,10 @@ public class Main {
         String firstLine = bufferedReader.readLine();
         int size = (firstLine.length() + 1) / 4;
         SupplyStack[] supplyStacks = new SupplyStack[size];
+        SupplyStack[] supplyStacks2 = new SupplyStack[size];
         for (int index = 0; index < size; index++) {
             supplyStacks[index] = new SupplyStack();
+            supplyStacks2[index] = new SupplyStack();
         }
         List<String> configuration = new ArrayList<>();
         configuration.add(firstLine);
@@ -28,6 +31,7 @@ public class Main {
                 char character = row.charAt(i * 4 + 1);
                 if (character != ' ') {
                     supplyStacks[i].push(character);
+                    supplyStacks2[i].push(character);
                 }
             }
         }
@@ -39,8 +43,7 @@ public class Main {
                     Integer.parseInt(tokens[5])
             });
         }
-        for (int index = 0; index < moves.size(); index++) {
-            int[] row = moves.get(index);
+        for (int[] row : moves) {
             int count = row[0];
             int fromIndex = row[1] - 1;
             int toIndex = row[2] - 1;
@@ -49,9 +52,27 @@ public class Main {
             }
         }
         StringBuilder result = new StringBuilder();
-        for (int index = 0; index < supplyStacks.length; index++) {
-            result.append(supplyStacks[index].peek());
+        for (SupplyStack supplyStack : supplyStacks) {
+            result.append(supplyStack.peek());
         }
         System.out.println(result);
+
+        Stack<Character> temp = new Stack<>();
+        for (int[] row : moves) {
+            int count = row[0];
+            int fromIndex = row[1] - 1;
+            int toIndex = row[2] - 1;
+            for (int i = 0; i < count; i++) {
+                temp.push(supplyStacks2[fromIndex].pop());
+            }
+            for (int i = 0; i < count; i++) {
+                supplyStacks2[toIndex].push(temp.pop());
+            }
+        }
+        StringBuilder result2 = new StringBuilder();
+        for (SupplyStack supplyStack : supplyStacks2) {
+            result2.append(supplyStack.peek());
+        }
+        System.out.println(result2);
     }
 }
