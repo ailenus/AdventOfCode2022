@@ -10,9 +10,9 @@ public class Directory {
 
     public Directory(Directory parent, Map<String, Directory> children,
                      Map<String, Integer> files) {
-        this.PARENT = parent;
-        this.CHILDREN = children;
-        this.FILES = files;
+        PARENT = parent;
+        CHILDREN = children;
+        FILES = files;
     }
 
     public Directory getParent() {
